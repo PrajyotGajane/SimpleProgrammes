@@ -1,5 +1,5 @@
 
-public class LinkedList {
+public class LinkedListProgram {
     static Node head;
 
     public static class Node {

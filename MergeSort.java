@@ -1,81 +1,71 @@
 import java.util.Scanner;
 
 public class MergeSort {
-    public static void main(String[] args) {
-        Scanner userInput = new Scanner(System.in);
-        System.out.print("Enter the size of the array : ");
-        int inputArraySize = userInput.nextInt();
-        int[] toSortArray = new int[inputArraySize];
-        System.out.println("Enter elements : ");
-        for (int index = 0; index < inputArraySize; index++) {
-            toSortArray[index] = userInput.nextInt();
-        }
 
-        System.out.print("Unsorted array : ");
-        printArray(toSortArray);
-        Sort(toSortArray, 0, toSortArray.length - 1);
-        System.out.println("After applying merge sort");
-        printArray(toSortArray);
-
-
-    }
-
-    private static void Sort(int[] toSortArray, int left, int right) {
-        if (left < right)
-        {
-            int mid = (left + right) / 2;
-            Sort(toSortArray, left, mid);
-            Sort(toSortArray, mid + 1, right);
-            Merge(toSortArray, left, mid, right);
+    private void sort(int[] array, int lower, int upper) {
+        if (lower < upper) {
+            int mid = (lower + upper) / 2;
+            sort(array, lower, mid);
+            sort(array, mid + 1, upper);
+            merge(array, lower, mid, upper);
         }
     }
 
-    private static void Merge(int[] toSortArray, int left, int mid, int right) {
-        int mLeft = mid - left  + 1;
-        int mRight = right - mid;
+    private void merge(int[] array, int lower, int mid, int upper) {
 
-        int[] leftArray = new int[mLeft];
-        int[] rightArray = new int[mRight];
+        int[] temp = new int[upper + 1];
+        int i = lower;
+        int j = mid + 1;
+        int k = lower;
 
-        for (int index = 0; index < mLeft; ++index)
-            leftArray[index] = toSortArray[left + index];
-        for (int index = 0; index < mRight; ++index)
-            rightArray[index] = toSortArray[mid + 1 + index];
-        int i = 0, j = 0;
-
-        // Initial index of merged subarry array
-        int k = mLeft;
-        while (i < mLeft && j < mRight) {
-            if (leftArray[i] <= rightArray[j]) {
-                toSortArray[k] = leftArray[i];
+        while (i <= mid && j <= upper) {
+            if (array[i] <= array[j]) {
+                temp[k] = array[i];
                 i++;
-            }
-            else {
-                toSortArray[k] = rightArray[j];
+            } else {
+                temp[k] = array[j];
                 j++;
             }
             k++;
         }
-
-        /* Copy remaining elements of L[] if any */
-        while (i < mLeft) {
-            toSortArray[k] = leftArray[i];
-            i++;
-            k++;
+        if (i > mid) {
+            while (j <= upper) {
+                temp[k] = array[j];
+                k++;
+                j++;
+            }
+        } else {
+            while (i <= mid) {
+                temp[k] = array[i];
+                k++;
+                i++;
+            }
         }
 
-        /* Copy remaining elements of R[] if any */
-        while (j < mRight) {
-            toSortArray[k] = rightArray[j];
-            j++;
-            k++;
+        for (i = lower; i <= upper; i++) {
+            array[i] = temp[i];
         }
     }
 
-    public static void printArray(int[] toSortArray)
-    {
-        for (int eachValue : toSortArray) {
-            System.out.print(" " + eachValue);
+    private void display(int[] array) {
+        System.out.println("Sorted Array : ");
+        for( int i = 0; i < array.length; i++){
+            System.out.println("array[" + i +"] = " + array[i]);
         }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        MergeSort mergeObject = new MergeSort();
+        int[] array = new int[5];
+
+        System.out.println("Enter array elements");
+        for (int i = 0; i < array.length; i++) {
+            System.out.print("array[" + i + "] = ");
+            array[i] = scanner.nextInt();
+        }
+
+        mergeObject.sort(array, 0, array.length - 1);
+        mergeObject.display(array);
     }
 }
